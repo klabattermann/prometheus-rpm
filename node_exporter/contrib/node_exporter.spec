@@ -6,10 +6,10 @@
 Name:		node-exporter
 Version:        %{version}
 %if %{with sysvinit}
-Release:        1.sysvinit%{?dist}
+Release:        2.sysvinit%{?dist}
 %endif
 %if %{with systemd}
-Release:        1%{?dist}
+Release:        2%{?dist}
 %endif
 Summary:	Prometheus exporter for machine metrics, written in Go with pluggable metric collectors.
 Group:		System Environment/Daemons
@@ -43,15 +43,16 @@ mkdir -vp $RPM_BUILD_ROOT/var/run/prometheus
 mkdir -vp $RPM_BUILD_ROOT/var/lib/prometheus
 mkdir -vp $RPM_BUILD_ROOT/usr/bin
 mkdir -vp $RPM_BUILD_ROOT/opt/prometheus
+mkdir -vp $RPM_BUILD_ROOT/etc/sysconfig
 %if %{with sysvinit}
 mkdir -vp $RPM_BUILD_ROOT/etc/init.d
-mkdir -vp $RPM_BUILD_ROOT/etc/sysconfig
 install -m 644 contrib/node_exporter.sysconfig $RPM_BUILD_ROOT/etc/sysconfig/node_exporter
 install -m 755 contrib/node_exporter.init $RPM_BUILD_ROOT/etc/init.d/node_exporter
 %endif
 %if %{with systemd}
 mkdir -vp $RPM_BUILD_ROOT/usr/lib/systemd/system
 install -m 755 contrib/node_exporter.service $RPM_BUILD_ROOT/usr/lib/systemd/system/node_exporter.service
+install -m 644 contrib/node_exporter.config $RPM_BUILD_ROOT/etc/sysconfig/node_exporter
 %endif
 install -m 755 node_exporter $RPM_BUILD_ROOT/usr/bin/node_exporter
 
@@ -69,7 +70,9 @@ chgrp prometheus /var/run/prometheus
 chmod 774 /var/run/prometheus
 chown prometheus:prometheus /opt/prometheus
 chmod 744 /opt/prometheus
+%if %{with sysvinit}
 sudo service node_exporter start
+%endif
 
 %files
 %defattr(-,root,root,-)
@@ -82,4 +85,5 @@ sudo service node_exporter start
 %endif
 %if %{with systemd}
 /usr/lib/systemd/system/node_exporter.service
+/etc/sysconfig/node_exporter
 %endif
