@@ -44,7 +44,7 @@ echo
 %install
 mkdir -vp $RPM_BUILD_ROOT/var/log/prometheus/
 mkdir -vp $RPM_BUILD_ROOT/var/run/prometheus
-mkdir -vp $RPM_BUILD_ROOT/var/lib/prometheus
+mkdir -vp $RPM_BUILD_ROOT/u1/var/lib/prometheus
 mkdir -vp $RPM_BUILD_ROOT/usr/bin
 mkdir -vp $RPM_BUILD_ROOT/etc/prometheus
 mkdir -vp $RPM_BUILD_ROOT/etc/sysconfig
@@ -68,7 +68,8 @@ install -m 755 promtool $RPM_BUILD_ROOT/usr/bin/promtool
 install -m 755 contrib/prometheus.init $RPM_BUILD_ROOT/etc/init.d/prometheus
 %endif
 %if %{with systemd}
-install -m 755 contrib/prometheus.service $RPM_BUILD_ROOT/usr/lib/systemd/system/prometheus.service
+install -m 644 contrib/prometheus.service $RPM_BUILD_ROOT/usr/lib/systemd/system/prometheus.service
+install -m 640 contrib/prometheus $RPM_BUILD_ROOT/etc/sysconfig/prometheus
 %endif
 
 install -m 755 console_libraries/menu.lib $RPM_BUILD_ROOT/usr/share/prometheus/console_libraries
@@ -149,6 +150,6 @@ chmod 744 /var/log/prometheus
 /usr/share/prometheus/consoles/snmp.html
 /usr/share/prometheus/console_libraries/prom.lib
 /usr/share/prometheus/console_libraries/menu.lib
-%attr(755, prometheus, prometheus)/var/lib/prometheus
+%attr(755, prometheus, prometheus)/u1/var/lib/prometheus
 /var/run/prometheus
 /var/log/prometheus

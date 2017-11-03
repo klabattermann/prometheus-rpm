@@ -13,7 +13,7 @@ rpm:
 	cp -Rv contrib "$(PWD)/rpmbuild/SOURCES/$(NAME)-$(VERSION).linux-amd64"
 	cd "$(PWD)/rpmbuild/SOURCES" && tar cvfz $(NAME)-$(VERSION).linux-amd64.tar.gz $(NAME)-$(VERSION).linux-amd64
 	rpmbuild --define "version $(VERSION)" --define '_topdir '"$(PWD)/rpmbuild" -ba --clean contrib/$(NAME).spec
-	rpmbuild --with sysvinit --without systemd --define "version $(VERSION)" --define '_topdir '"$(PWD)/rpmbuild" -ba --clean contrib/$(NAME).spec
+    #rpmbuild --with sysvinit --without systemd --define "version $(VERSION)" --define '_topdir '"$(PWD)/rpmbuild" -ba --clean contrib/$(NAME).spec
 
 clean:
 	rm -rf "$(PWD)/rpmbuild/SOURCES/$(NAME)-$(VERSION).linux-amd64"
